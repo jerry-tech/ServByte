@@ -18,13 +18,13 @@ public class Delivery {
     private byte[] logo;
 
     @Column(name="bike", nullable=false)
-    private String bike;
+    private int bike;
 
     @Column(name="car", nullable=false)
-    private String car;
+    private int car;
 
     @Column(name="boat", nullable=false)
-    private String boat;
+    private int boat;
 
     @Column(name="time_boat", nullable=false, length = 50)
     private String timeBoat;
@@ -67,27 +67,27 @@ public class Delivery {
         this.logo = logo;
     }
 
-    public String getBike() {
+    public int getBike() {
         return bike;
     }
 
-    public void setBike(String bike) {
+    public void setBike(int bike) {
         this.bike = bike;
     }
 
-    public String getCar() {
+    public int getCar() {
         return car;
     }
 
-    public void setCar(String car) {
+    public void setCar(int car) {
         this.car = car;
     }
 
-    public String getBoat() {
+    public int getBoat() {
         return boat;
     }
 
-    public void setBoat(String boat) {
+    public void setBoat(int boat) {
         this.boat = boat;
     }
 
