@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    @Query("from account a where a.name = :name")
+    //using the query annotation to creating custom query for login
+    @Query("select a from account a where a.name = :name")
+    //creating a method in the interface
     Account getByName(@Param("name")String name);
 }

@@ -14,7 +14,7 @@ public class Delivery {
 
     @Lob
     @Type(type="org.hibernate.type.BinaryType")
-    @Column(name="logo", nullable=false)
+    @Column(name="logo", nullable=false, length = 80000)
     private byte[] logo;
 
     @Column(name="bike", nullable=false)
@@ -44,12 +44,30 @@ public class Delivery {
             name = "account_id",
             nullable = false,
             updatable = false,
-            insertable= false,
             foreignKey = @ForeignKey(
                     name = ""
             )
     )//join column properties
     private Account account;
+
+    public Delivery(){
+
+    }
+
+    public Delivery(Long deliveryId) {
+        this.deliveryId = deliveryId;
+    }
+
+    public Delivery(byte[] logo, int bike, int car, int boat, String timeBoat, String timeCar, String timeBike, Account account) {
+        this.logo = logo;
+        this.bike = bike;
+        this.car = car;
+        this.boat = boat;
+        this.timeBoat = timeBoat;
+        this.timeCar = timeCar;
+        this.timeBike = timeBike;
+        this.account = account;
+    }
 
     public Long getDeliveryId() {
         return deliveryId;
