@@ -16,8 +16,8 @@ public class MyUserDetailService implements UserDetailsService {
     private AccountRepository accountRepository;
 
     @Override//overriding the loadUserByUsername method
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.getByName(username);
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        Account account = accountRepository.getByName(name);
 
         if(account != null){
             //passing the register object to the constructor of the MyUserDetails class

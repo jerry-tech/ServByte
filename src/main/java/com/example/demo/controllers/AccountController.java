@@ -6,18 +6,26 @@ import com.example.demo.models.Restaurant;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.DeliveryRepository;
 import com.example.demo.repository.RestaurantRepository;
-import com.example.demo.service.Logic;
-import com.example.demo.service.EncodePassword;
-import com.example.demo.service.ResponseHandler;
+import com.example.demo.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/api/v1/account")
 public class AccountController {
+
+    private static final Logger logger = LoggerFactory.getLogger(Account.class);
 
     @Autowired
     RestaurantRepository restaurantRepository;
@@ -30,6 +38,12 @@ public class AccountController {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    DeliveryStorageService deliveryStorageService;
+
+    @Autowired
+    RestStorageService restStorageService;
 
     @Autowired
     Logic logic;
@@ -47,10 +61,9 @@ public class AccountController {
             accountRepository.saveAndFlush(account);
 
             try {
-                Delivery deliveryCont = new Delivery(logic.compressBytes(logo.getBytes()), bike, car, boat, timeBoat, timeCar, timeBike, new Account(account.getAccountId()));
+                Delivery deliveryCont = new Delivery(deliveryStorageService.storeFile(logo), bike, car, boat, timeBoat, timeCar, timeBike, new Account(account.getAccountId()));
                 //saving delivery details;
                 Delivery deliveryResponse = deliveryRepository.saveAndFlush(deliveryCont);
-                deliveryResponse.setLogo(null);
 
                 return responseHandler.generateResponse(HttpStatus.OK, true, "Delivery Company account created successfully.", deliveryResponse);
             } catch (Exception e) {
@@ -74,10 +87,9 @@ public class AccountController {
             accountRepository.saveAndFlush(account);//saving account data
 
             try {
-                Restaurant restConst = new Restaurant(logic.compressBytes(logo.getBytes()), city, new Account(account.getAccountId()));
+                Restaurant restConst = new Restaurant(restStorageService.storeFile(logo), city, new Account(account.getAccountId()));
                 //saving restaurant details;
                 Restaurant restResponse = restaurantRepository.saveAndFlush(restConst);
-                restResponse.setLogo(null);
 
                 return responseHandler.generateResponse(HttpStatus.OK, true, "Delivery Company account created successfully.", restResponse);
             } catch (Exception e) {
@@ -105,5 +117,8 @@ public class AccountController {
             return responseHandler.generateResponse(HttpStatus.BAD_REQUEST, false, "Error in creating account." + e.getMessage(), null);
         }
     }
+
+
+
 
 }
