@@ -7,13 +7,13 @@ public class Order {
 
     @Id//specifying primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)//auto-generating the primary key
-    @Column(name="order_id", unique = true)
+    @Column(name = "order_id", unique = true)
     private Long orderId;
 
-    @Column(name="pay_channel", nullable=false, length = 50)
+    @Column(name = "pay_channel", columnDefinition = "varchar(50) default 'card'")//specifying defaults
     private String payChannel;
 
-    @Column(name="pay_status", nullable=false, length = 50)
+    @Column(name = "pay_status", columnDefinition = "varchar(50) default 'pending'")
     private String payStatus;
 
     @ManyToOne(
@@ -25,7 +25,6 @@ public class Order {
             name = "account_id",
             nullable = false,
             updatable = false,
-            insertable= false,
             foreignKey = @ForeignKey(
                     name = ""
             )
@@ -41,7 +40,6 @@ public class Order {
             name = "meal_id",
             nullable = false,
             updatable = false,
-            insertable= false,
             foreignKey = @ForeignKey(
                     name = ""
             )
@@ -57,14 +55,16 @@ public class Order {
             name = "rest_id",
             nullable = false,
             updatable = false,
-            insertable= false,
             foreignKey = @ForeignKey(
                     name = ""
             )
     )//join column properties
     private Restaurant restaurant;
 
-    @Column(name="pay_ref_url", nullable=false, length = 50)
+    @Column(name = "trans_ref", nullable = false, length = 50, unique = true)
+    private String transRef;
+
+    @Column(name = "pay_ref_url", nullable = true, length = 250, unique = true)
     private String payRefUrl;
 
     @ManyToOne(
@@ -76,13 +76,24 @@ public class Order {
             name = "delivery_id",
             nullable = false,
             updatable = false,
-            insertable= false,
             foreignKey = @ForeignKey(
                     name = ""
             )
     )//join column properties
     private Delivery delivery;
 
+    public Order() {
+
+    }
+
+    public Order(String payStatus, String transRef, Account account, Meal meal, Restaurant restaurant, Delivery delivery) {
+        this.payStatus = payStatus;
+        this.transRef = transRef;
+        this.account = account;
+        this.meal = meal;
+        this.restaurant = restaurant;
+        this.delivery = delivery;
+    }
 
     public Long getOrderId() {
         return orderId;
@@ -146,5 +157,14 @@ public class Order {
 
     public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
+    }
+
+
+    public String getTransRef() {
+        return transRef;
+    }
+
+    public void setTransRef(String transRef) {
+        this.transRef = transRef;
     }
 }

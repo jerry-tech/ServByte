@@ -1,11 +1,13 @@
 package com.example.demo.models;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Type;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+@ConfigurationProperties(prefix = "mealfile")
 @Entity(name = "meal")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Meal {
@@ -15,10 +17,11 @@ public class Meal {
     @Column(name="meal_id", unique = true)
     private Long mealId;
 
-    @Lob
-    @Type(type="org.hibernate.type.BinaryType")
     @Column(name="picture", nullable=false)
-    private byte[] picture;
+    private String picture;
+
+    @Column(name="name", nullable=false)
+    private String name;
 
     @Column(name="price", nullable=false)
     private BigDecimal price;
@@ -38,27 +41,38 @@ public class Meal {
             name = "rest_id",
             nullable = false,
             updatable = false,
-            insertable= false,
             foreignKey = @ForeignKey(
                     name = ""
             )
     )//join column properties
-    private Restaurant resturant;
+    private Restaurant restaurant;
 
-    @ManyToOne(
-            fetch = FetchType.LAZY,
-            optional = false
-    )//specifying the relationships btw the two tables
-    @JoinColumn(
-            name = "rest_id",
-            nullable = false,
-            updatable = false,
-            insertable= false,
-            foreignKey = @ForeignKey(
-                    name = ""
-            )
-    )//join column properties
-    private Menu menu;
+    @Column(name = "upload_dir", nullable = true)
+    private String uploadDir;
+
+    public Meal(){
+
+    }
+    public Meal(Long mealId) {
+        this.mealId = mealId;
+    }
+
+    public Meal(String name, String picture, BigDecimal price, String timeTaken, String description, Restaurant restaurant) {
+        this.name = name;
+        this.picture = picture;
+        this.price = price;
+        this.timeTaken = timeTaken;
+        this.description = description;
+        this.restaurant = restaurant;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Long getMealId() {
         return mealId;
@@ -68,11 +82,14 @@ public class Meal {
         this.mealId = mealId;
     }
 
-    public byte[] getPicture() {
-        return picture;
+    public String getPicture() {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/meal/")
+                .path(picture)
+                .toUriString();
     }
 
-    public void setPicture(byte[] picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 
@@ -100,19 +117,19 @@ public class Meal {
         this.description = description;
     }
 
-    public Restaurant getResturant() {
-        return resturant;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setResturant(Restaurant resturant) {
-        this.resturant = resturant;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
-    public Menu getMenu() {
-        return menu;
+    public String getUploadDir() {
+        return uploadDir;
     }
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
+    public void setUploadDir(String uploadDir) {
+        this.uploadDir = uploadDir;
     }
 }

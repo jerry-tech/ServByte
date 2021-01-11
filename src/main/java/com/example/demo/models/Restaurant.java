@@ -1,7 +1,11 @@
 package com.example.demo.models;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import javax.persistence.*;
 
+@ConfigurationProperties(prefix = "restlogo")
 @Entity(name = "restaurant")
 public class Restaurant {
 
@@ -11,10 +15,13 @@ public class Restaurant {
     private Long restId;
 
     @Column(name="logo", nullable=false)
-    private byte[] logo;
+    private String logo;
 
     @Column(name="city", nullable=false, length = 50)
     private String city;
+
+    @Column(name = "upload_dir", nullable = true)
+    private String uploadDir;
 
     @ManyToOne(
             fetch = FetchType.LAZY,
@@ -25,12 +32,25 @@ public class Restaurant {
             name = "account_id",
             nullable = false,
             updatable = false,
-            insertable= false,
             foreignKey = @ForeignKey(
                     name = ""
             )
     )//join column properties
     private Account account;
+
+    public Restaurant(){
+
+    }
+
+    public Restaurant(Long restId){
+        this.restId = restId;
+    }
+
+    public Restaurant(String logo, String city, Account account) {
+        this.logo = logo;
+        this.city = city;
+        this.account = account;
+    }
 
     public Long getRestId() {
         return restId;
@@ -40,11 +60,14 @@ public class Restaurant {
         this.restId = restId;
     }
 
-    public byte[] getLogo() {
-        return logo;
+    public String getLogo() {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/restaurants/")
+                .path(logo)
+                .toUriString();
     }
 
-    public void setLogo(byte[] logo) {
+    public void setLogo(String logo) {
         this.logo = logo;
     }
 
@@ -62,5 +85,13 @@ public class Restaurant {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public String getUploadDir() {
+        return uploadDir;
+    }
+
+    public void setUploadDir(String uploadDir) {
+        this.uploadDir = uploadDir;
     }
 }

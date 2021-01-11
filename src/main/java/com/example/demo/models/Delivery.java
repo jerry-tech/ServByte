@@ -1,9 +1,12 @@
 package com.example.demo.models;
 
 import org.hibernate.annotations.Type;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.*;
 
+@ConfigurationProperties(prefix = "deliveryfile")
 @Entity(name = "delivery")
 public class Delivery {
 
@@ -12,10 +15,8 @@ public class Delivery {
     @Column(name="delivery_id", unique = true)
     private Long deliveryId;
 
-    @Lob
-    @Type(type="org.hibernate.type.BinaryType")
-    @Column(name="logo", nullable=false, length = 80000)
-    private byte[] logo;
+    @Column(name="logo", nullable=false)
+    private String logo;
 
     @Column(name="bike", nullable=false)
     private int bike;
@@ -50,6 +51,9 @@ public class Delivery {
     )//join column properties
     private Account account;
 
+    @Column(name = "upload_dir", nullable = true)
+    private String uploadDir;
+
     public Delivery(){
 
     }
@@ -58,7 +62,7 @@ public class Delivery {
         this.deliveryId = deliveryId;
     }
 
-    public Delivery(byte[] logo, int bike, int car, int boat, String timeBoat, String timeCar, String timeBike, Account account) {
+    public Delivery(String logo, int bike, int car, int boat, String timeBoat, String timeCar, String timeBike, Account account) {
         this.logo = logo;
         this.bike = bike;
         this.car = car;
@@ -77,11 +81,14 @@ public class Delivery {
         this.deliveryId = deliveryId;
     }
 
-    public byte[] getLogo() {
-        return logo;
+    public String getLogo() {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/delivery/")
+                .path(logo)
+                .toUriString();
     }
 
-    public void setLogo(byte[] logo) {
+    public void setLogo(String logo) {
         this.logo = logo;
     }
 
@@ -139,5 +146,13 @@ public class Delivery {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public String getUploadDir() {
+        return uploadDir;
+    }
+
+    public void setUploadDir(String uploadDir) {
+        this.uploadDir = uploadDir;
     }
 }
