@@ -75,7 +75,7 @@ public class MealController {
 
     /**method used to all meal by a restaurant */
     @GetMapping("/api/v1/getMeal")
-    public ResponseEntity<?> getAllMealByRestaurant(@RequestParam("restId")Long restId, @RequestHeader("Authorization") String JWT){
+    public ResponseEntity<?> getAllMealByRestaurant(@RequestParam("restId")Long restId){
 
         try{
             //getting all meal by a restaurant
@@ -93,7 +93,7 @@ public class MealController {
 
     /**method used to get a single meal */
     @GetMapping("/api/v1/getMeal/{mealId}")
-    public ResponseEntity<?> getSingleMeal(@PathVariable("mealId")Long mealId, @RequestHeader("Authorization") String JWT){
+    public ResponseEntity<?> getSingleMeal(@PathVariable("mealId")Long mealId){
 
         try{
             //calling the getOne method of JPA repository

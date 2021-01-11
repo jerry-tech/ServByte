@@ -38,7 +38,7 @@ public class RestaurantController {
      * method used to get all delivery companies
      */
     @GetMapping("/api/v1/restaurants")
-    public ResponseEntity<?> getRestaurants(@RequestHeader("Authorization") String JWT){
+    public ResponseEntity<?> getRestaurants(){
         try{
             //calling the getOne method of JPA repository
             List<Restaurant> restaurants = restaurantRepository.findAll();
