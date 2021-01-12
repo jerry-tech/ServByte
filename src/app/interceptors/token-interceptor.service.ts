@@ -1,15 +1,15 @@
 import { HttpHandler, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
+import { Injectable, Injector } from '@angular/core';
+import { AuthService } from '../login/service/auth.service';
 
 @Injectable(
 )
 export class TokenInterceptorService {
 
   content: string;
-  injector: any;
   
-  constructor() { }
+  
+  constructor(private injector: Injector) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     console.log(`AddHeaderInterceptor - ${req.url}`);//subject to removal

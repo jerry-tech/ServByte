@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 // MDB Angular Free
 import { CheckboxModule, WavesModule, ButtonsModule, InputsModule, IconsModule, CardsModule } from 'angular-bootstrap-md'
-import { AuthService } from './auth.service';
+import { AuthService } from './service/auth.service';
 import { loginData } from './login.model';
 
 @Component({
@@ -23,12 +23,16 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  
 
   loginUser() {
     this._auth.loginUser(this.model).subscribe(
       res => {
-        localStorage.setItem('token', res.name);
-        console.log(res);
+        if(this.model.accountType == 'user'){
+          localStorage.setItem('userToken', res.data.JWT);
+          console.log(res);
+        }
+       
       },
       err => {
         console.log(err);

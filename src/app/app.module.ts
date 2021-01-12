@@ -12,8 +12,11 @@ import { MealComponent } from './meal/meal.component';
 import { MenuComponent } from './menu/menu.component';
 import { MenuItemComponent } from './menu-item/menu-item.component';
 import { CartComponent } from './cart/cart.component';
-import { TokenInterceptorService } from './login/token-interceptor.service';
+import { TokenInterceptorService } from './interceptors/token-interceptor.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ResturantsComponent } from './resturants/resturants.component';
+import { RestThumbnailComponent } from './rest-thumbnail/rest-thumbnail.component';
+import { UserLoginComponent } from './user/user-login/user-login.component';
 
 @NgModule({
   
@@ -26,7 +29,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MealComponent,
     MenuComponent,
     MenuItemComponent,
-    CartComponent
+    CartComponent,
+    ResturantsComponent,
+    RestThumbnailComponent,
+    UserLoginComponent
   ],
 
   imports: [

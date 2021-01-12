@@ -1,0 +1,25 @@
+<div id="id01" class="mode">
+    <form #loginform="ngForm" (submit)="loginUser(loginform)" novalidate class="modal-content animate">
+        <div class="imgcontainer">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close"
+                title="Close Modal">&times;</span>
+            <div class="h2 text-center">servByte Resturant</div>
+        </div>
+
+        <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input class="name" minlength="1" [class.formerror]="name.invalid && name.touched" required #name="ngModel"
+                Placeholder="Enter Name" type="text" name="name" [(ngModel)]="model.name" name="title">
+
+            <label for="psw"><b>Password</b></label>
+            <input class="pass" [class.formerror]="password.invalid && password.touched" type="password" minlength="6" required
+                name="password" #password="ngModel" placeholder="Enter Password" [(ngModel)]="model.password" /><br>
+        
+
+            <button type="submit" [disabled]="loginform.invalid">Login</button>
+
+            <a style="text-align: right;">Don't have an account ?</a>
+        </div>
+
+    </form>
+</div>

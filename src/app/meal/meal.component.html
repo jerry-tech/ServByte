@@ -3,7 +3,7 @@
   <div class="h2 text-center">Restaurants Meal</div>
 
   <div class="text-muted">Enter your Meal details</div>
-  <form>
+  <form [formGroup]="restMeal">
       <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-1 mb-1">
           <div class="form-group"> <label class="text-muted mandatory">Price</label> <input type="text" required class="form-control"> </div>
           <div class="form-group"> <label class="text-muted mandatory">Time Taken</label> <input type="email" required class="form-control"> </div>
