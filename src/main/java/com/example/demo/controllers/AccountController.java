@@ -53,7 +53,7 @@ public class AccountController {
 
     @PostMapping("/delivery")
     /**method used to create an account for delivery businesses */
-    public ResponseEntity<?> createAccDelivery(@RequestParam("bike") int bike, @RequestParam("boat") int boat, @RequestParam("car") int car, @RequestParam("logo") MultipartFile logo, @RequestParam("timeBike") String timeBike, @RequestParam("timeBoat") String timeBoat, @RequestParam("timeCar") String timeCar, @RequestParam("name") String name, @RequestParam("emailAddress") String emailAddress, @RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
+    public ResponseEntity<?> createAccDelivery(@RequestParam(value = "bike", required = false) int bike, @RequestParam(value = "boat", required = false) int boat, @RequestParam(value = "car", required = false) int car, @RequestParam("logo") MultipartFile logo, @RequestParam(value = "timeBike", required = false) String timeBike, @RequestParam(value = "timeBoat", required = false) String timeBoat, @RequestParam(value = "timeCar", required = false) String timeCar, @RequestParam("name") String name, @RequestParam("emailAddress") String emailAddress, @RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
 
         try {
             //passing data through the constructor of the account class

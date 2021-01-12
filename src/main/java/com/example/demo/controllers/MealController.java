@@ -68,7 +68,7 @@ public class MealController {
             return responseHandler.generateResponse(HttpStatus.OK, true, "Meal account created successfully.", mealResponse);
 
         } catch (Exception e) {
-            return responseHandler.generateResponse(HttpStatus.BAD_REQUEST, false, "Unable to add meal.", null);
+            return responseHandler.generateResponse(HttpStatus.BAD_REQUEST, false, e.getMessage(), null);
         }
 
     }

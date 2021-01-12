@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @ConfigurationProperties(prefix = "mealfile")
 @Entity(name = "meal")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Meal {
 
     @Id//specifying primary key
