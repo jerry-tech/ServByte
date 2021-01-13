@@ -47,10 +47,10 @@ public class Logic {
 
 
     //method used to build email message template
-    public String emailBody(String username,  String mealName) {
-        return "Hi "+username+"!. We’re so excited that you’ve decided to purchase "+mealName+".\n" +
-                "\n" +
-                "ServeByte Customer Service";
+    public String emailBody(String username,  String mealName, String deliveryTime) {
+        return "Hi "+username+"!. We’re so excited that you’ve decided to order "+mealName+".\n" +
+                "Don't you worry you meal will be at you door step at approximately "+ deliveryTime +"\n" +
+                "Thanks for choosing ServeByte Inc.";
     }
 
     //method used to generate random used for the otp

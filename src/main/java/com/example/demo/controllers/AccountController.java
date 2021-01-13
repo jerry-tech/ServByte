@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/account")
@@ -53,7 +55,7 @@ public class AccountController {
 
     @PostMapping("/delivery")
     /**method used to create an account for delivery businesses */
-    public ResponseEntity<?> createAccDelivery(@RequestParam(value = "bike", required = false) int bike, @RequestParam(value = "boat", required = false) int boat, @RequestParam(value = "car", required = false) int car, @RequestParam("logo") MultipartFile logo, @RequestParam(value = "timeBike", required = false) String timeBike, @RequestParam(value = "timeBoat", required = false) String timeBoat, @RequestParam(value = "timeCar", required = false) String timeCar, @RequestParam("name") String name, @RequestParam("emailAddress") String emailAddress, @RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
+    public ResponseEntity<?> createAccDelivery(@RequestParam(value = "bike", required = false) String bike, @RequestParam(value = "boat", required = false) String boat, @RequestParam(value = "car", required = false) String car, @RequestParam("logo") MultipartFile logo, @RequestParam(value = "timeBike", required = false) String timeBike, @RequestParam(value = "timeBoat", required = false) String timeBoat, @RequestParam(value = "timeCar", required = false) String timeCar, @RequestParam("name") String name, @RequestParam("emailAddress") String emailAddress, @RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
 
         try {
             //passing data through the constructor of the account class
@@ -61,7 +63,7 @@ public class AccountController {
             accountRepository.saveAndFlush(account);
 
             try {
-                Delivery deliveryCont = new Delivery(deliveryStorageService.storeFile(logo), bike, car, boat, timeBoat, timeCar, timeBike, new Account(account.getAccountId()));
+                Delivery deliveryCont = new Delivery(deliveryStorageService.storeFile(logo), Long.valueOf(bike), Long.valueOf(car), Long.valueOf(boat), timeBoat, timeCar, timeBike, new Account(account.getAccountId()));
                 //saving delivery details;
                 Delivery deliveryResponse = deliveryRepository.saveAndFlush(deliveryCont);
 
@@ -103,18 +105,31 @@ public class AccountController {
 
     @PostMapping("/users")
     /**method used to create an account for users */
-    public ResponseEntity<?> createAccRestaurant(@RequestBody Account account) {
+    public ResponseEntity<?> createAccRestaurant(@RequestParam("name") String name, @RequestParam("emailAddress") String emailAddress, @RequestParam("phoneNumber") String phoneNumber, @RequestParam("password") String password) {
 
         try {
-            account.setName(account.getName().toLowerCase());//to lowercase
-            account.setPassword(encodePassword.encryptPassword(account.getPassword()));//encoding password
-            Account accountResponse = accountRepository.saveAndFlush(account);//saving account data
+            //passing data through the constructor of the account class
+            Account account = new Account(name.toLowerCase(), emailAddress, phoneNumber, encodePassword.encryptPassword(password), "user");
+            accountRepository.saveAndFlush(account);//saving account data
 
-            return responseHandler.generateResponse(HttpStatus.OK, true, "User account created successfully.", accountResponse);
+            return responseHandler.generateResponse(HttpStatus.OK, true, "User account created successfully.", account);
 
         } catch (Exception e) {
             //error response
             return responseHandler.generateResponse(HttpStatus.BAD_REQUEST, false, "Error in creating account." + e.getMessage(), null);
+        }
+    }
+
+    @GetMapping("/getDelivery")
+    public ResponseEntity<?> createAccRestaurant() {
+
+        try {
+            List<Account> accountResponse = accountRepository.findAll().stream().filter(c->c.getAccountType().equalsIgnoreCase("delivery")).collect(Collectors.toList());;
+            return responseHandler.generateResponse(HttpStatus.OK, true, "successfully.", accountResponse);
+
+        } catch (Exception e) {
+            //error response
+            return responseHandler.generateResponse(HttpStatus.BAD_REQUEST, false, "." + e.getMessage(), null);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.demo.models;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity(name = "orders")
 public class Order {
@@ -10,11 +11,23 @@ public class Order {
     @Column(name = "order_id", unique = true)
     private Long orderId;
 
+    @Column(name = "delivery_means")
+    private String deliveryMeans;
+
     @Column(name = "pay_channel", columnDefinition = "varchar(50) default 'card'")//specifying defaults
     private String payChannel;
 
     @Column(name = "pay_status", columnDefinition = "varchar(50) default 'pending'")
     private String payStatus;
+
+    @Column(name = "delivery_fee")
+    private BigDecimal deliveryFee;
+
+    @Column(name = "amount")
+    private BigDecimal amount;
+
+    @Column(name = "total")
+    private BigDecimal total;
 
     @ManyToOne(
             fetch = FetchType.LAZY,
@@ -86,13 +99,50 @@ public class Order {
 
     }
 
-    public Order(String payStatus, String transRef, Account account, Meal meal, Restaurant restaurant, Delivery delivery) {
+
+    public Order(String deliveryMeans, String payStatus, BigDecimal deliveryFee, BigDecimal amount, BigDecimal total, String transRef, Account account, Meal meal, Restaurant restaurant,  Delivery delivery) {
+        this.deliveryMeans = deliveryMeans;
         this.payStatus = payStatus;
+        this.deliveryFee = deliveryFee;
+        this.amount = amount;
+        this.total = total;
         this.transRef = transRef;
         this.account = account;
         this.meal = meal;
         this.restaurant = restaurant;
         this.delivery = delivery;
+    }
+
+    public String getDeliveryMeans() {
+        return deliveryMeans;
+    }
+
+    public void setDeliveryMeans(String deliveryMeans) {
+        this.deliveryMeans = deliveryMeans;
+    }
+
+    public BigDecimal getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public void setDeliveryFee(BigDecimal deliveryFee) {
+        this.deliveryFee = deliveryFee;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
     public Long getOrderId() {

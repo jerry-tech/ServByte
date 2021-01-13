@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.*;
+import java.util.concurrent.atomic.LongAccumulator;
 
 @ConfigurationProperties(prefix = "deliveryfile")
 @Entity(name = "delivery")
@@ -19,13 +20,13 @@ public class Delivery {
     private String logo;
 
     @Column(name="bike", nullable=false)
-    private int bike;
+    private Long bike;
 
     @Column(name="car", nullable=false)
-    private int car;
+    private Long car;
 
     @Column(name="boat", nullable=false)
-    private int boat;
+    private Long boat;
 
     @Column(name="time_boat", nullable=false, length = 50)
     private String timeBoat;
@@ -62,7 +63,7 @@ public class Delivery {
         this.deliveryId = deliveryId;
     }
 
-    public Delivery(String logo, int bike, int car, int boat, String timeBoat, String timeCar, String timeBike, Account account) {
+    public Delivery(String logo, Long bike, Long car, Long boat, String timeBoat, String timeCar, String timeBike, Account account) {
         this.logo = logo;
         this.bike = bike;
         this.car = car;
@@ -92,27 +93,27 @@ public class Delivery {
         this.logo = logo;
     }
 
-    public int getBike() {
+    public Long getBike() {
         return bike;
     }
 
-    public void setBike(int bike) {
+    public void setBike(Long bike) {
         this.bike = bike;
     }
 
-    public int getCar() {
+    public Long getCar() {
         return car;
     }
 
-    public void setCar(int car) {
+    public void setCar(Long car) {
         this.car = car;
     }
 
-    public int getBoat() {
+    public Long getBoat() {
         return boat;
     }
 
-    public void setBoat(int boat) {
+    public void setBoat(Long boat) {
         this.boat = boat;
     }
 

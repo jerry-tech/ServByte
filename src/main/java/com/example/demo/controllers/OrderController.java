@@ -2,10 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.*;
 import com.example.demo.paystack.InitializeTransaction;
-import com.example.demo.repository.AccountRepository;
-import com.example.demo.repository.MealRepository;
-import com.example.demo.repository.OrderRepository;
-import com.example.demo.repository.RestaurantRepository;
+import com.example.demo.repository.*;
 import com.example.demo.service.DefaultEmailService;
 import com.example.demo.service.Logic;
 import com.example.demo.service.ResponseHandler;
@@ -41,6 +38,9 @@ public class OrderController {
     MealRepository mealRepository;
 
     @Autowired
+    DeliveryRepository deliveryRepository;
+
+    @Autowired
     OrderRepository orderRepository;
 
     @Autowired
@@ -58,14 +58,18 @@ public class OrderController {
     String transactionReference;
 
     private static final Logger logger = LoggerFactory.getLogger(Order.class);
+    private String avgDeliveryTime;
+    private String deliveryMeans;
 
     /**
      * method used to initiate payment of a meal in a restaurant using a delivery company
      */
     @PostMapping
-    public ResponseEntity<?> mealPayOrder(@RequestHeader("Authorization") String JWT, @RequestParam("mealId") Long mealId, @RequestParam("deliveryId") Long deliveryId, @RequestParam("restId") Long restId) {
+    public ResponseEntity<?> mealPayOrder(@RequestHeader("Authorization") String JWT, @RequestParam("deliveryMeans") String deliveryMeans, @RequestParam("amount") String amount, @RequestParam("deliveryFee") String deliveryFee,  @RequestParam("mealId") Long mealId, @RequestParam("deliveryId") Long deliveryId) {
         //order no
         this.transactionReference = logic.getOrderNoGeneration();
+
+        BigDecimal total = BigDecimal.valueOf(Long.parseLong(amount)).add(BigDecimal.valueOf(Long.parseLong(deliveryFee)));
 
         //getting user accountId from JWT
         Long accountId = logic.returnId(JWT);
@@ -73,17 +77,20 @@ public class OrderController {
         //using accountId to getUsersEmail
         String email = accountRepository.getOne(accountId).getEmailAddress();
 
-        BigDecimal price = mealRepository.getOne(mealId).getPrice();
+        Long restId = mealRepository.getResturantByMeal(mealId).getRestaurant().getRestId();
+
+        this.deliveryMeans = deliveryMeans;
 
         try {
 
             //passing the data coming from the transaction model into the initialize transaction method
-            JSONObject jsonObject = initializeTransaction.initializeTransaction(this.transactionReference, price.toString(), email, null, null);
+            JSONObject jsonObject = initializeTransaction.initializeTransaction(this.transactionReference, total.toString(), email, null, null);
 
             //checking if transaction initialization is true
             if (jsonObject.getBoolean("status")) {
                 try {
-                    Order order = new Order("pending", transactionReference, new Account(accountId), new Meal(mealId), new Restaurant(restId), new Delivery(deliveryId));
+
+                    Order order = new Order(deliveryMeans, "pending", BigDecimal.valueOf(Long.parseLong(deliveryFee)), BigDecimal.valueOf(Long.parseLong(amount)), total, transactionReference, new Account(accountId), new Meal(mealId), new Restaurant(restId), new Delivery(deliveryId));
                     orderRepository.saveAndFlush(order);
 
                     //success response
@@ -122,13 +129,23 @@ public class OrderController {
 
                     //getting account details
                     Account account = accountRepository.getOne(orders.getAccount().getAccountId());
+
+                    Delivery delivery = deliveryRepository.getOne(orders.getDelivery().getDeliveryId());
+
+                    if(this.deliveryMeans.equalsIgnoreCase("bike")){
+                        this.avgDeliveryTime = delivery.getTimeBike();
+                    }else if(this.deliveryMeans.equalsIgnoreCase("boat")){
+                        this.avgDeliveryTime = delivery.getTimeBoat();
+                    }else if(this.deliveryMeans.equalsIgnoreCase("car")){
+                        this.avgDeliveryTime = delivery.getTimeCar();
+                    }
                     //sending email
                     try {
-                        defaultEmailService.sendSimpleEmail(account.getEmailAddress(), "Meal Order Successful.", logic.emailBody(account.getName(), mealRepository.getOne(orders.getMeal().getMealId()).getName()));
+                        defaultEmailService.sendSimpleEmail(account.getEmailAddress(), "Meal Order Successful.", logic.emailBody(account.getName(), mealRepository.getOne(orders.getMeal().getMealId()).getName(), this.avgDeliveryTime));
 
                         //sending sms to users upon a successful payment
                         //populating the constructor of the send sms twilio
-                        SmsRequest smsRequestOTP = new SmsRequest(account.getPhoneNumber(), logic.emailBody(account.getName(), mealRepository.getOne(orders.getMeal().getMealId()).getName()));
+                        SmsRequest smsRequestOTP = new SmsRequest(account.getPhoneNumber(), logic.emailBody(account.getName(), mealRepository.getOne(orders.getMeal().getMealId()).getName(), ""));
                         twilioSmsSender.sendSms(smsRequestOTP);
 
                         return stringObjectMap.toMap();

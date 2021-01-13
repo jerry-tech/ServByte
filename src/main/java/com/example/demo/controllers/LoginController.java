@@ -64,6 +64,7 @@ public class LoginController {
                 response.put("accountId", account.getAccountId());
                 response.put("JWT", JWT);
                 response.put("username", account.getName().toLowerCase());
+                response.put("accountType", account.getAccountType().toLowerCase());
                 response.put("emailAddress", account.getEmailAddress());
                 response.put("phoneNumber", account.getPhoneNumber());
 

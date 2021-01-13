@@ -37,13 +37,13 @@ public class DeliveryController {
     /**
      * method used to get all delivery companies
      */
-    @GetMapping("/api/v1/delivery")
-    public ResponseEntity<?> getDelivery(@RequestHeader("Authorization") String JWT){
+    @GetMapping("/api/v1/delivery/{name}")
+    public ResponseEntity<?> getDelivery(@PathVariable("name")String name){
         try{
             //calling the getOne method of JPA repository
-            List<Delivery> meal = deliveryRepository.findAll();
+            Delivery delivery = deliveryRepository.getDeliveryAccount(name);
 
-            return responseHandler.generateResponse(HttpStatus.OK, true, "All delivery company", meal);
+            return responseHandler.generateResponse(HttpStatus.OK, true, "All delivery company", delivery);
 
         }catch (Exception e){
             return responseHandler.generateResponse(HttpStatus.INTERNAL_SERVER_ERROR, false, "Unable to get single meal.", null);
