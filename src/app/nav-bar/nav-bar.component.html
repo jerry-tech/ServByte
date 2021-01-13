@@ -1,32 +1,29 @@
 <br>
 <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark pink ie-nav fixed-top" [containerInside]="false">
-  <mdb-navbar-brand>
-      <a class="logo navbar-brand" href="#"><strong>ServByte</strong></a>
-  </mdb-navbar-brand>
-  <links>
-      <ul class="navbar-nav mr-auto p-">
-          <li class="nav-item active waves-light " mdbWavesEffect>
-              <a class="nav-link" [routerLink]="['/Home']">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item waves-light" mdbWavesEffect>
-              <a class="nav-link" [routerLink]="['/Meal']">Meal</a>
-          </li>
-          <li class="nav-item waves-light" mdbWavesEffect>
-              <a class="nav-link" [routerLink]="['/Menu']">Menu</a>
-          </li>
-         
-      
-        
-      </ul>
-      <ul class="navbar-nav nav-flex-icons">
-        <li class="nav-item waves-light" mdbWavesEffect>
-            <a class="nav-link" [routerLink]="['/Cart']">Cart</a>
-        </li>
-          <li class="nav-item waves-light" mdbWavesEffect>
-              <a class="nav-link" [routerLink]="['/Login']"><mdb-icon fab icon="person"></mdb-icon></a>
-          </li>
-      </ul>
-  </links>
+    <mdb-navbar-brand>
+        <a href="#" class="h2 text-center mr-4">ServByte</a>
+    </mdb-navbar-brand>
+    <links>
+        <ul class="navbar-nav mr-auto ">
+
+            <li class="nav-item waves-light" mdbWavesEffect>
+                <a class="nav-link" [routerLink]="['/meal']" *ngIf="this.authService.getAdmin()">Add Meal</a>
+            </li>
+
+        </ul>
+        <ul class="navbar-nav nav-flex-icons">
+
+            <li class="nav-item waves-light" mdbWavesEffect>
+                <a class="nav-link" [routerLink]="['/login']" *ngIf="this.authService.getUsername()" (click)='logOutUser()'>Username</a>
+            </li>
+            <li class="nav-item waves-light" mdbWavesEffect>
+                <a class="nav-link" [routerLink]="['/login']" *ngIf="!this.authService.getUsername()">Login</a>
+            </li>
+            <li class="nav-item waves-light" mdbWavesEffect style="visibility: hidden;">
+                <a class="nav-link" [routerLink]="['/login']"><span style="width: 20px; height: 20px">U</span></a>
+            </li>
+        </ul>
+    </links>
 </mdb-navbar>
 <!-- Main -->
 <router-outlet></router-outlet>

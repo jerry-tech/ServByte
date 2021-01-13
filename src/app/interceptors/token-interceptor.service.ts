@@ -1,6 +1,6 @@
 import { HttpHandler, HttpRequest } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
-import { AuthService } from '../login/service/auth.service';
+import { AuthService } from '../user/user-login/auth.service';
 
 @Injectable(
 )
@@ -20,7 +20,7 @@ export class TokenInterceptorService {
         //     setHeaders: {
         //   'token': token || ''
         // }
-        headers: req.headers.set('token', token || ''),
+        headers: req.headers.set('Authorization', token || ''),
       });
       return next.handle(tohenizedReq);
   

@@ -1,33 +1,94 @@
 <div class="wrapper bg-white">
+    <form [formGroup]="registerForm">
+        <div class="h2 text-center">ServByte Registration</div>
+        <div class="h5 font-weight-bold">Account Type</div>
+        <select class="mb-4 form-control" formControlName="accountType" (change)="onChange($event.target.value)">
+            <option *ngFor="let account of options" [ngValue]="account.value" selected>{{ account.label }}</option>
+        </select>
 
-    <div class="h2 text-center">ServByte Registration</div>
-    <div class="h5 font-weight-bold">Account Type</div>
-    <select class="mb-4 form-control" name="accountType">
-        <option *ngFor="let account of options" [ngValue]="account.value">{{ account.label }}</option>
-    </select>
 
+        <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-1 mb-1">
+            <div class="form-group">
+                <label class="text-muted mandatory">Name</label>
+                <input type="text" required class="form-control" formControlName="name"
+                    [class.formerror]="(registerForm.get('name').touched || registerForm.get('name').dirty) && !registerForm.get('name').valid">
+            </div>
+            <div class="form-group">
+                <label class="text-muted mandatory">Email Address</label>
+                <input type="email" required class="form-control" formControlName="email"
+                    [class.formerror]="(registerForm.get('email').touched || registerForm.get('email').dirty) && !registerForm.get('email').valid">
+            </div>
+        </div>
+        <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-1  mb-1">
+            <div class="form-group">
+                <label class="text-muted mandatory">Phone Number</label>
+                <input type="text" required class="form-control" formControlName="phone"
+                    [class.formerror]="(registerForm.get('phone').touched || registerForm.get('phone').dirty) && !registerForm.get('phone').valid">
+            </div>
+            <div class="form-group">
+                <label class="text-muted mandatory">Password</label>
+                <input type="password" required class="form-control" formControlName="password"
+                    [class.formerror]="(registerForm.get('password').touched || registerForm.get('password').dirty) && !registerForm.get('password').valid">
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column;"
+            class="align-items-sm-center justify-content-sm-between pt-1 mb-1" *ngIf="rest">
+
+            <label class="text-muted">Restaurant Logo</label>
+            <figure class="container" *ngIf="previewImage != '' && previewImage && registerForm.get('logo').valid">
+                <img [src]="previewImage" style="max-height: 200px;" class="card border container card-img"
+                    alt="Registration Image">
+            </figure>
+
+            <button (click)='filePicker.click()' class="form-control">Choose</button>
+
+            <div class="form-group">
+                <input #filePicker (change)='onImagePicked($event)' type="file" name="logo" style="display:none">
+            </div>
+
+        </div>
+
+        <div *ngIf="delivery">
+            <div class="form-group">
+                <label class="text-muted">City</label>
+                <input type="text" class="form-control" formControlName="city"
+                    [class.formerror]="(registerForm.get('city').touched || registerForm.get('city').dirty) && !registerForm.get('city').valid">
+            </div>
+            <!-- check box -->
+            <div class="mt-4">
+                <hr class="mb-30">
+                <label class="check"> <input type="checkbox" formControlName="car" (change)="search('car',$event)"> <span>Car</span> </label>
+                <label class="check"> <input type="checkbox" formControlName="bike" (change)="search('bike',$event)"> <span>Bike</span> </label>
+                <label class="check"> <input type="checkbox" formControlName="boat" (change)="search('boat',$event)"> <span>Boat</span> </label>
+            </div>
+
+            <div class="form-group mt-2">
+                <label class="text-muted">TimeTaken(Car)</label>
+                <input type="text"  class="form-control" formControlName="timeCar">
+            </div>
+            <div class="form-group mt-2">
+                <label class="text-muted">TimeTaken(Bike)</label>
+                <input type="text" class="form-control" formControlName="timeBike">
+            </div>
+
+            <div class="form-group mt-2">
+                <label class="text-muted">TimeTaken(Boat)</label>
+                <input type="text" class="form-control" formControlName="timeBoat">
+            </div>
+
+        </div>
+
+        <br>
+        <div class="d-flex align-items-center justify-content-sm-end button-section">
+            <button class="btn btn-primary mx-4" type="submit" (click)='save()'>Submit</button>
+            <button class="btn">Cancel</button>
+           
+
+        </div>
+
+        <a class="text-muted" [routerLink]="['/login']" >Already have an account ?
+        </a>
+
+    </form>
 </div>
-<div class="text-muted">Enter your registration details</div>
-<form>
-    <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-1 mb-1">
-        <div class="form-group"> <label class="text-muted mandatory">Name</label> <input type="text" required
-                class="form-control"> </div>
-        <div class="form-group"> <label class="text-muted mandatory">Email Address</label> <input type="email" required
-                class="form-control"> </div>
-    </div>
-    <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-1 mb-1">
-
-        <div class="form-group"> <label class="text-muted">Restaurant Logo</label> <input type="file"
-                class="form-control"> </div>
-    </div>
-    <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-1  mb-1">
-        <div class="form-group"> <label class="text-muted mandatory">Phone Number</label> <input type="tel" required
-                class="form-control"> </div>
-        <div class="form-group"> <label class="text-muted">City</label> <input type="text" class="form-control"> </div>
-    </div>
-    <div class="form-group"> <label class="text-muted mandatory">Password</label> <input type="password" required
-            class="form-control"> </div>
-    <br>
-    <div class="d-flex align-items-center justify-content-sm-end button-section"> <button class="btn btn-primary mx-4"
-            type="submit">Submit</button> <button class="btn">Cancel</button> </div>
-</form>

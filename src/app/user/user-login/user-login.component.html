@@ -1,20 +1,24 @@
 <div id="id01" class="mode">
     <form #loginform="ngForm" (submit)="loginUser(loginform)" novalidate class="modal-content animate">
         <div class="imgcontainer">
-            <span onclick="document.getElementById('id01').style.display='none'" class="close"
-                title="Close Modal">&times;</span>
             <div class="h2 text-center">servByte Resturant</div>
         </div>
 
         <div class="container">
+            <div class="row px-3"> <label class="mb-1">
+                    <h6 class="mb-0 text-sm">Account Type</h6>
+                </label><select class="mb-4 form-control" name="accountType" [(ngModel)]="model.accountType" ngModel>
+                    <option *ngFor="let account of options" [ngValue]="account.value">{{ account.label }}</option>
+                </select> </div>
             <label for="uname"><b>Username</b></label>
             <input class="name" minlength="1" [class.formerror]="name.invalid && name.touched" required #name="ngModel"
                 Placeholder="Enter Name" type="text" name="name" [(ngModel)]="model.name" name="title">
 
             <label for="psw"><b>Password</b></label>
-            <input class="pass" [class.formerror]="password.invalid && password.touched" type="password" minlength="6" required
-                name="password" #password="ngModel" placeholder="Enter Password" [(ngModel)]="model.password" /><br>
-        
+            <input class="pass" [class.formerror]="password.invalid && password.touched" type="password" minlength="6"
+                required name="password" #password="ngModel" placeholder="Enter Password"
+                [(ngModel)]="model.password" /><br>
+
 
             <button type="submit" [disabled]="loginform.invalid">Login</button>
 

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { AuthService } from '../user/user-login/auth.service';
+
 
 @Component({
   selector: 'app-nav-bar',
@@ -6,10 +9,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent implements OnInit {
+  myAppendedUser: BehaviorSubject<any>;
+  myUsers: any;
 
-  constructor() { }
+  constructor(public authService: AuthService) { 
 
-  ngOnInit(): void {
   }
+  ngOnInit(): void {
+    
+  }
+
+ 
 
 }

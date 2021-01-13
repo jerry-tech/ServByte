@@ -1,20 +1,52 @@
 <div class="wrapper bg-white">
 
-  <div class="h2 text-center">Restaurants Meal</div>
+    <div class="h2 text-center">Restaurants Meal</div>
 
-  <div class="text-muted">Enter your Meal details</div>
-  <form [formGroup]="restMeal">
-      <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-1 mb-1">
-          <div class="form-group"> <label class="text-muted mandatory">Price</label> <input type="text" required class="form-control"> </div>
-          <div class="form-group"> <label class="text-muted mandatory">Time Taken</label> <input type="email" required class="form-control"> </div>
-      </div>
-      <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-1 mb-1">
-         
-          <div class="form-group"> <label class="text-muted">Meal Picture</label> <input type="file" class="form-control"> </div>
-      </div>
-      
-      <div class="form-group"> <label class="text-muted mandatory">Description</label> <textarea type="" required class="form-control"> </textarea> </div>
-      <br>
-      <div class="d-flex align-items-center justify-content-sm-end button-section"> <button class="btn btn-primary mx-4" type="submit">Submit</button> <button class="btn">Cancel</button> </div>
-  </form>
+    <form [formGroup]="restMeal">
+        <div style="display: flex; flex-direction: column;" class="align-items-sm-center justify-content-sm-between pt-1 mb-1">
+
+            <figure class="container"
+                *ngIf="previewImage != '' && previewImage && restMeal.get('mealImage').valid">
+                <img [src]="previewImage" style="max-height: 200px;"
+                    class="card border container card-img" alt="Registration Image">
+            </figure>
+
+            <div>
+                <label class="text-muted">Meal Picture</label>
+                <button (click)='filePicker.click()' id="userImage" class="form-control">Choose</button>
+            </div>
+
+            <input #filePicker (change)='onImagePicked($event)' type="file" name="mealImage" style="display:none"
+                class="form-control">
+        </div>
+
+        <div class="d-sm-flex align-items-sm-center justify-content-sm-between pt-1 mb-1">
+            <div class="form-group">
+                <label class="text-muted mandatory">Price</label>
+                <input type="text" required formControlName="price" type="number" step="0.01"
+                    [class.formerror]="(restMeal.get('price').touched || restMeal.get('price').dirty) && !restMeal.get('price').valid"
+                    class="form-control">
+                    <span *ngIf="restMeal.get('price').touched || restMeal.get('price').dirty" style="color: red;text-align: left;">Price cannot be null.</span>                    
+            </div>
+            <div class="form-group">
+                <label class="text-muted mandatory">Time Taken</label>
+                <input type="text" required class="form-control" formControlName="timeTaken" type="text" [class.formerror]="(restMeal.get('timeTaken').touched || restMeal.get('timeTaken').dirty) && !restMeal.get('timeTaken').valid">
+                <span *ngIf="restMeal.get('timeTaken').errors?.minlength" style="color: red;text-align: left;">Time taken cannot be null</span>
+            </div>
+        </div>
+
+
+        <div class="form-group"> <label class="text-muted mandatory">Description</label> 
+            <textarea required  formControlName="description" type="text" [class.formerror]="(restMeal.get('description').touched || restMeal.get('description').dirty) && !restMeal.get('description').valid"
+                class="form-control"> </textarea> </div>
+                <span *ngIf="restMeal.get('description').errors?.minlength" style="color: red;text-align: left;">Description too short !</span>
+        <br>
+        <div class="d-flex align-items-center justify-content-sm-end button-section">
+             <button
+                class="btn btn-primary mx-4" type="submit" (click)='saveMeal()'>Submit</button> 
+                <button type="reset" class="btn btn-white border-primary">Cancel</button> 
+            </div>
+
+            <!-- {{ restMeal.value | json }} -->
+    </form>
 </div>

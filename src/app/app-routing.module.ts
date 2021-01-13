@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CartComponent } from './cart/cart.component';
 import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
 import { MealComponent } from './meal/meal.component';
+import { MenuItemResolve } from './menu-item/item-resolve';
 import { MenuItemComponent } from './menu-item/menu-item.component';
 import { MenuComponent } from './menu/menu.component';
 import { MenuResolve } from './menu/resolver/menu-resolve';
@@ -19,20 +18,22 @@ import { UserLoginComponent } from './user/user-login/user-login.component';
 
             { path: 'Home', component: HomeComponent },
 
-            { path: 'Meal', component: MealComponent },
-            { path: 'details', component: MenuItemComponent },
-            { path: 'Cart', component: CartComponent },
-            { path: 'Register', component: RegisterComponent },
+            { path: 'meal', component: MealComponent },
+
+            { path: 'register', component: RegisterComponent },
             { path: 'restaurant', component: ResturantsComponent },
 
-
+            {
+                path: 'details/:id', component: MenuItemComponent, resolve: {
+                    resolvedData: MenuItemResolve
+                }, 
+            },
             {
                 path: 'menu/:id', component: MenuComponent, resolve: {
                     resolvedData: MenuResolve
                 }
             },
-            { path: 'user', component: UserLoginComponent },
-            { path: 'Login', component: LoginComponent },
+            { path: 'login', component: UserLoginComponent },
             { path: '', redirectTo: 'Home', pathMatch: 'full' },
             { path: '**', redirectTo: 'Home', pathMatch: 'full' }
 

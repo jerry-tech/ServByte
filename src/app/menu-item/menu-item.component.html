@@ -1,105 +1,60 @@
+<br><br>
 <div class="container">
-  <div id="demo" class="carousel slide" data-ride="carousel">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <div class="card">
-          <div class="path">HOME / FACE <a>/ CLEANSERS</a> </div>
-          <div class="row">
-            <div class="col-md-6 text-center align-self-center"> <img class="img-fluid"
-                src="https://i.imgur.com/7a9V4yw.png"> </div>
-            <div class="col-md-6 info">
-              <div class="row title">
-                <div class="col">
-                  <h2>Herbalism</h2>
-                </div>
-                <div class="col text-right"><a href="#"><i class="fa fa-heart-o"></i></a></div>
-              </div>
-              <p>Natural herbal wash</p>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span> <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span> <span class="fa fa-star-half-full"></span>
-              <span id="reviews">1590
-                Reviews</span>
-              <div class="row price">
-                <label class="radio">
-                  <input type="radio" name="size1" value="small" checked>
-                  <span>
-                    <div class="row">
-                      <a><b>1.5 oz.</b></a>
-                    </div>
-                    <div class="row">$12.95</div>
-                  </span>
-                </label>
-                <label class="radio">
-                  <input type="radio" name="size1" value="large">
-                  <span>
-                    <div class="row">
-                      <a><b>4.4 oz.</b></a>
-                    </div>
-                    <div class="row">$21.95</div>
-                  </span>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="row lower">
-            <div class="col">
-              <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                <i class="fa fa-arrow-left"></i>
-              </a>
-              <a class="carousel-control-next" href="#demo" data-slide="next">
-                <i class="fa fa-arrow-right"></i>
-              </a>
-            </div>
-            <div class="col text-right align-self-center"> <button class="btn">Add to cart</button> </div>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <div class="card">
-          <div class="path">HOME / FACE <a>/ CLEANSERS</a> </div>
-          <div class="row">
-            <div class="col-md-6 text-center align-self-center"> <img class="img-fluid"
-                src="https://i.imgur.com/7a9V4yw.png"> </div>
-            <div class="col-md-6 info">
-              <div class="row title">
-                <div class="col">
-                  <h2>Herbalism 2</h2>
-                </div>
-                <div class="col text-right"><a href="#"><i class="fa fa-heart-o"></i></a></div>
-              </div>
-              <p>Natural herbal wash pro</p> <span class="fa fa-star checked"></span> <span
-                class="fa fa-star checked"></span> <span class="fa fa-star checked"></span> <span
-                class="fa fa-star checked"></span> <span class="fa fa-star-half-full"></span> <span id="reviews">1590
-                Reviews</span>
-              <div class="row price">
-                <label class="radio">
-                  <input type="radio" name="size2" value="small">
-                  <span>
-                    <div class="row"><a><b>13.5 oz.</b></a></div>
-                    <div class="row">$36.95</div>
-                  </span>
 
-                </label>
-                <label class="radio">
-                  <input type="radio" name="size2" value="large" checked>
-                  <span>
-                    <div class="row"><a><b>18.4 oz.</b></a>
-                    </div>
-                    <div class="row">$61.95</div>
-                  </span>
-                </label>
-              </div>
-            </div>
+  <form [formGroup]="orderForm" class="card">
+    <div class="row">
+      <div class="col-md-6 text-center align-self-center"> <img style="max-height: 300px;" class="img-fluid"
+          src={{this.selectedMenu.picture}}>
+      </div>
+      <div class="col-md-6 info">
+        <div class="row title">
+          <div class="col">
+            <h2>{{selectedMenu.name}}</h2>
           </div>
-          <div class="row lower">
-            <div class="col"> <a class="carousel-control-prev" href="#demo" data-slide="prev"><i
-                  class="fa fa-arrow-left"></i></a> <a class="carousel-control-next" href="#demo" data-slide="next"><i
-                  class="fa fa-arrow-right"></i></a> </div>
-            <div class="col text-right align-self-center"> <button class="btn">Add to cart</button> </div>
+          <div class="col text-right"><a href="#"><i class="fa fa-heart-o"></i></a></div>
+        </div>
+        <p style="font-size: larger;"># {{this.selectedMenu.price}}</p><input type="hidden" value={{this.selectedMenu.price}} formControlName="amount"/>
+        <span>{{selectedMenu.description}}</span>
+        <div class="row price">
+          <div class="row "> <label class="mb-1">
+              <h6 class="mb-0 text-sm">Delivery Company</h6>
+            </label><select class="mb-4 form-control" name="delivery" (change)="onChange($event.target.value)">
+
+              <option *ngFor="let deliveryName of deliveryNames" [ngValue]="deliveryName.name" selected>{{
+                deliveryName.name }}
+
+              </option>
+
+            </select> </div>
+
+          <label class="radio mt-4">
+            <input type="radio" name="size1" value="large">
+            <span>
+              <h6 class="mb-0 text-sm">Delivery Fee</h6>
+              <div class="row">
+                <a><b class="text-black-50">#500</b></a><input type="hidden" value="50000" formControlName="deliveryFee"/>
+                <!--price-->
+                <input type="hidden" value="" formControlName="deliveryId"/>
+              </div>
+            </span>
+          </label>
+          <div class="mt-4">
+            <h6 class="mb-0 text-sm">Delivery Means</h6>
+            <hr class="mb-30">
+            <label class="check" *ngIf="car"> <input type="radio"  formControlName="road" (change)="search('car',$event)">
+              <span>Car</span> </label>
+            <label class="check" *ngIf="bike"> <input type="radio"  formControlName="road" (change)="search('bike',$event)">
+              <span>Bike</span> </label>
+            <label class="check" *ngIf="boat"> <input type="radio" formControlName="road" (change)="search('boat',$event)">
+              <span>Boat</span> </label>
           </div>
         </div>
+
       </div>
     </div>
-  </div>
-</div>
+
+    <div class="row lower">
+      <div class="col text-right align-self-center"> <button class="btn" (click)='payNow()'>Pay now !</button> </div>
+    </div>
+  
+</form>

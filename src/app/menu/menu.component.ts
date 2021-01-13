@@ -36,11 +36,13 @@ export class MenuComponent implements OnInit {
     )
   }
 
-  showDialogIf(){
-    if(localStorage.getItem('userToken') != null){
-      this.router.navigate(['/details']);
+  showDialogIf(id: number){
+    if(localStorage.getItem('token') != null){
+      this.router.navigate(['/details', id]);
     }else{
-      this.show = true;
+      // this.show = true;
+
+      this.router.navigate(['/details', id]);
     }
   }
 

@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { loginData } from 'src/app/login/login.model';
-import { AuthService } from 'src/app/login/service/auth.service';
+import { AuthService } from './auth.service';
+import { loginData } from './loginData';
 
 @Component({
   selector: 'app-user-login',
@@ -11,9 +11,13 @@ import { AuthService } from 'src/app/login/service/auth.service';
 })
 export class UserLoginComponent implements OnInit {
 
-  @Input() rest: any; //using @Inject to pass in the data
+  options = [
+    { value: 'restaurant', label: 'restaurant' },
+    { value: 'delivery', label: 'delivery' },
+    { value: 'user', label: 'user' },
+  ];
 
-  model = new loginData('user','', '');
+  model = new loginData('', '', '');
   constructor(private _auth: AuthService, private router: Router) { }
 
   ngOnInit(): void {
@@ -22,9 +26,11 @@ export class UserLoginComponent implements OnInit {
   loginUser(form: NgForm) {
     this._auth.loginUser(this.model).subscribe(
       res => {
-        // if(res.data.)
-        localStorage.setItem('userToken', res.data.JWT);
-        console.log(res);
+        //saving Json web token to local storage
+        localStorage.setItem('token', res.data.JWT);
+        
+        //routing to single product page
+        this.router.navigate(['/details']);
       },
       err => {
         console.log(err);
