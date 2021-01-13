@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DataService } from '../service/data.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class MealComponent implements OnInit {
   restMeal: FormGroup;
   previewImage: string | ArrayBuffer;
   selectedImage: File;
-  constructor(private fb: FormBuilder,private dataService: DataService) { }
+  constructor(private router: Router, private fb: FormBuilder,private dataService: DataService) { }
 
   ngOnInit(): void {
 
@@ -49,7 +50,7 @@ export class MealComponent implements OnInit {
       this.restMeal.value.price,
       this.restMeal.value.timeTaken).subscribe(
         res => {
-          console.log(res);
+          this.router.navigate(['/restaurant']);
         },
         err=> console.log(err)
       )

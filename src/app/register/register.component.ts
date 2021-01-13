@@ -92,6 +92,8 @@ export class RegisterComponent implements OnInit {
   }
 
   save() {
+    
+
     console.log(this.registerForm.value);
 
     if (this.registerForm.value.accountType == 'user') {
@@ -110,6 +112,9 @@ export class RegisterComponent implements OnInit {
 
     } else if (this.registerForm.value.accountType == 'delivery') {
 
+      if(localStorage.getItem('token') != null)
+
+    localStorage.clear();
 
       this.dataService.saveDelivery(this.registerForm.value.timeBike, this.registerForm.value.timeBoat, this.registerForm.value.timeCar, this.bike, this.boat, this.car, this.registerForm.value.phoneNumber, this.registerForm.value.city, this.registerForm.value.emailAddress, this.selectedImage, this.registerForm.value.name, this.registerForm.value.password)
         .subscribe(res => this.router.navigate(['/login']),

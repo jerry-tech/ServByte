@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../service/data.service';
 import { AuthService } from '../user/user-login/auth.service';
 
 
@@ -9,9 +10,11 @@ import { AuthService } from '../user/user-login/auth.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService, private dataService: DataService) { }
 
   ngOnInit(): void {
+    this.dataService.getSuccess()
+    .subscribe();
   }
 
 

@@ -6,8 +6,10 @@ import { MenuItemResolve } from './menu-item/item-resolve';
 import { MenuItemComponent } from './menu-item/menu-item.component';
 import { MenuComponent } from './menu/menu.component';
 import { MenuResolve } from './menu/resolver/menu-resolve';
+
 import { RegisterComponent } from './register/register.component';
 import { ResturantsComponent } from './resturants/resturants.component';
+import { AuthGuard } from './user/user-login/auth.guard';
 import { UserLoginComponent } from './user/user-login/user-login.component';
 
 
@@ -26,7 +28,7 @@ import { UserLoginComponent } from './user/user-login/user-login.component';
             {
                 path: 'details/:id', component: MenuItemComponent, resolve: {
                     resolvedData: MenuItemResolve
-                }, 
+                },canActivate:[AuthGuard]
             },
             {
                 path: 'menu/:id', component: MenuComponent, resolve: {

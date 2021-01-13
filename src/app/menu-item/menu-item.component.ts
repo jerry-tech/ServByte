@@ -31,28 +31,25 @@ export class MenuItemComponent implements OnInit {
         .subscribe(res => {
 
           this.deliveryId = res.data.deliveryId;
-          this.bike = res.data.bike;
-          this.boat = res.data.boat;
-          this.car = res.data.car;
 
+          this.orderForm.get('deliveryId').setValue(this.deliveryId);
         });
   }
 
   ngOnInit(): void {
 
-    this.bike = false;
-    this.boat = false;
-    this.car = false;
+    this.bike = true;
+    this.boat = true;
+    this.car = true;
 
     //reative form validations 
     this.orderForm = this.fb.group({
       amount: ['', Validators.required],//any time more than one validation is written be sure to put it in an array unless it will throw [ validator to return Promise or Observable]
-      // boat: ['', Validators.required],
-      // car: ['', Validators.required],
       deliveryFee: ['', Validators.required],
+      deliveryId: [''],
+      deliveryMeans: [''],
       mealId: [''],
-      total: [''],
-      root: [''],
+      type: ['', Validators.required]
     })
 
     const resolvedData: ItemResolved = this.route.snapshot.data['resolvedData'];
@@ -64,8 +61,9 @@ export class MenuItemComponent implements OnInit {
       (res: ITEMS) => {
         console.log(res.data)
         this.selectedMenu = res.data
-        this.orderForm.get('amount').setValue(this.selectedMenu.price);
-        this.orderForm.get('deliveryFee').setValue('500');
+        this.orderForm.get('deliveryId').setValue(this.deliveryId);
+        this.orderForm.get('amount').setValue(this.selectedMenu.price + "00");
+        this.orderForm.get('deliveryFee').setValue('50000');
         this.orderForm.get('mealId').setValue(this.selectedMenu.mealId);
       },
       (err: any) => { console.log(err.data) }
@@ -87,33 +85,21 @@ export class MenuItemComponent implements OnInit {
 
   }
 
-  search(value: string, event) {
-
-    if (event.checked) {
-      if (value == 'boat') {
-        this.boat = true;
-      } else if (value == 'bike') {
-        this.bike = true;
-      } else if (value == 'car') {
-        this.car = true;
-      }
-    } else {
-      if (value == 'boat') {
-        this.boat = false;
-      } else if (value == 'bike') {
-        this.bike = false;
-      } else if (value == 'car') {
-        this.car = false;
-      }
-    }
-
-    console.log(value, event);
-  }
   payNow() {
-    this.dataservice.makePayment(5000, this.bike, this.boat, this.car,
-      50000, this.deliveryId, 1)
+    console.log(this.orderForm.value);
+    let fd = new FormData();//using form data
+
+    fd.append('deliveryMeans', this.orderForm.value.deliveryMeans);
+    fd.append('amount', this.orderForm.value.amount);
+    fd.append('deliveryId', this.orderForm.value.deliveryId);
+    fd.append('deliveryFee', this.orderForm.value.deliveryFee);
+    fd.append('mealId', this.orderForm.value.mealId);
+
+    this.dataservice.makePayment(fd)
       .subscribe(
-        res => console.log(this.orderForm),
+        res => {
+          window.location.href = res.data.authorization_url;
+        },
         err => console.log(err)
       );
 

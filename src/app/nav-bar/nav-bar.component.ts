@@ -9,8 +9,6 @@ import { AuthService } from '../user/user-login/auth.service';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent implements OnInit {
-  myAppendedUser: BehaviorSubject<any>;
-  myUsers: any;
 
   constructor(public authService: AuthService) { 
 

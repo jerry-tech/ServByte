@@ -44,9 +44,9 @@ export class AuthService {
     logOutUser() {
         // remove user from local storage and set current user to null
         localStorage.clear();
-        sessionStorage.clear();
+        this.myUserName.next(null);
         this.myAppendedUser.next(null);
-        this.router.navigate(['/Login']);
+        this.router.navigate(['/login']);
     }
    
     loggedIn() {

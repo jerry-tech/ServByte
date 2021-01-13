@@ -28,6 +28,7 @@ export class DataService {
   private _deliveryName = "http://localhost:8080/api/v1/delivery";
 
   private _order = "http://localhost:8080/api/v1/order";
+  private _verifyTrans = "http://localhost:8080/api/v1/order/verifyTransaction"
 
   model = new UserModel('', '', '', '', '');
 
@@ -59,6 +60,13 @@ export class DataService {
     return this.http.get<any>(this._delivery);
   }
 
+  getSuccess(): Observable<any> {
+    let getHeaders: HttpHeaders = new HttpHeaders({
+      'content-type': 'application/json',
+    });
+    return this.http.get<any>(this._verifyTrans);
+  }
+
   getDeliveryByName(name: string): Observable<any> {
     let getHeaders: HttpHeaders = new HttpHeaders({
       'content-type': 'application/json',
@@ -67,18 +75,9 @@ export class DataService {
     return this.http.get<any>(url);
   }
 
-  makePayment(amount: any, bike: any, boat: any, car: any, deliveryFee: any, deliveryId: any, mealId: any) {
-    let fd = new FormData();//using form data
+  makePayment(value: any) {
 
-    fd.append('amount', amount)
-    fd.append('bike', bike);
-    fd.append('boat', boat);
-    fd.append('car', car);
-    fd.append('deliveryFee', deliveryFee);
-    fd.append('deliveryId', deliveryId);
-    fd.append('mealId', mealId);
-
-    return this.http.post<any>(this._order, fd).pipe(
+    return this.http.post<any>(this._order, value).pipe(
       tap(data => {
         console.log(JSON.stringify(data))
       }),

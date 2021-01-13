@@ -28,12 +28,24 @@ export class UserLoginComponent implements OnInit {
       res => {
         //saving Json web token to local storage
         localStorage.setItem('token', res.data.JWT);
-        
+        console.log(res.data);
+        if (res.data.accountType == 'user') {
+
+          localStorage.setItem('username', res.data.username);
+          //setting the value of the behavoural subject
+          this._auth.myUserName.next(res.data.username);
+
+        } else {
+          localStorage.setItem('admin', res.data.username);
+
+          //setting the value of the behavoural subject
+          this._auth.myAppendedUser.next(res.data.username);
+        }
         //routing to single product page
-        this.router.navigate(['/details']);
+        this.router.navigate(['/restaurant']);
       },
       err => {
-        console.log(err);
+        window.alert('Wrong Username or Password');
       }
     )
   }

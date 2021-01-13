@@ -13,14 +13,15 @@
           </div>
           <div class="col text-right"><a href="#"><i class="fa fa-heart-o"></i></a></div>
         </div>
-        <p style="font-size: larger;"># {{this.selectedMenu.price}}</p><input type="hidden" value={{this.selectedMenu.price}} formControlName="amount"/>
+        <p style="font-size: larger;"># {{this.selectedMenu.price}}</p><input type="hidden"
+          value={{this.selectedMenu.price}} formControlName="amount" />
         <span>{{selectedMenu.description}}</span>
         <div class="row price">
           <div class="row "> <label class="mb-1">
               <h6 class="mb-0 text-sm">Delivery Company</h6>
             </label><select class="mb-4 form-control" name="delivery" (change)="onChange($event.target.value)">
-
-              <option *ngFor="let deliveryName of deliveryNames" [ngValue]="deliveryName.name" selected>{{
+              <option selected>select delivery company</option>
+              <option *ngFor="let deliveryName of deliveryNames" [ngValue]="deliveryName.name" >{{
                 deliveryName.name }}
 
               </option>
@@ -32,21 +33,26 @@
             <span>
               <h6 class="mb-0 text-sm">Delivery Fee</h6>
               <div class="row">
-                <a><b class="text-black-50">#500</b></a><input type="hidden" value="50000" formControlName="deliveryFee"/>
+                <a><b class="text-black-50">#500</b></a><input type="hidden" value="50000"
+                  formControlName="deliveryFee" />
                 <!--price-->
-                <input type="hidden" value="" formControlName="deliveryId"/>
+                <input type="hidden" value="" formControlName="deliveryId" />
               </div>
             </span>
           </label>
           <div class="mt-4">
             <h6 class="mb-0 text-sm">Delivery Means</h6>
+
             <hr class="mb-30">
-            <label class="check" *ngIf="car"> <input type="radio"  formControlName="road" (change)="search('car',$event)">
-              <span>Car</span> </label>
-            <label class="check" *ngIf="bike"> <input type="radio"  formControlName="road" (change)="search('bike',$event)">
+             <label class="radio">
+               <input type="radio" formControlName="deliveryMeans" value="car" checked>
+              <span>Car</span> </label> 
+              <label class="radio"> <input type="radio" formControlName="deliveryMeans" value="bike">
               <span>Bike</span> </label>
-            <label class="check" *ngIf="boat"> <input type="radio" formControlName="road" (change)="search('boat',$event)">
-              <span>Boat</span> </label>
+              <label class="radio"> <input type="radio" formControlName="deliveryMeans" value="boat">
+                <span>Boat</span> </label>
+
+                <i *ngIf="orderForm.get('deliveryMeans').errors?.required" style="color: red;text-align: left;">Delivery Means is required</i>
           </div>
         </div>
 
@@ -56,5 +62,5 @@
     <div class="row lower">
       <div class="col text-right align-self-center"> <button class="btn" (click)='payNow()'>Pay now !</button> </div>
     </div>
-  
-</form>
+
+  </form>
