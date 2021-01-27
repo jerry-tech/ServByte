@@ -20,7 +20,9 @@ your phone number must be added(https://www.twilio.com/console/phone-numbers/ver
 <li>username: servbyteservices@gmail.com</li>
 password: servbyteservices@gmail.com .<br>
 
-## For documentation (http://localhost:8080/swagger-ui.html#/)
+### For documentation (http://localhost:8080/swagger-ui.html#/)
+
+### Access to h2 database (http://localhost:8080/h2)
 
 
 
